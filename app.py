@@ -34,15 +34,9 @@ def predict_survival(name, Pclass, Sex, Age, SibSp, PaCh, Fare):
     else:
         result = f"Cheers 🥂 {name}, you Survived 😁"
 
-    probs = {"Died": float(probabilities[0]), "Survived": float(probabilities[1])}
-    return prediction, result, probs
+    # probs = {"Died": float(probabilities[0]), "Survived": float(probabilities[1])}
+    return prediction, result, probabilities
 
-
-# EXAMPLES: [name, Pclass, Sex, Age, SibSp, PaCh, Fare]
-EXAMPLES = [
-    ["Musa Adamu", 3, 0, 20, 0, 0, 8],
-    ["Tomi Jesu", 1, 1, 17, 0, 1, 150],
-]
 
 DEFAULTS = {
     "name": "",
@@ -71,11 +65,6 @@ def load_example(example):
 st.title("Titanic Survival Predictor")
 st.write("Enter a passenger's details and see if our random forest thinks they'd survive.")
 
-st.caption("Try an example:")
-cols = st.columns(len(EXAMPLES))
-for col, ex in zip(cols, EXAMPLES):
-    col.button(ex[0], on_click=load_example, args=(ex,), use_container_width=True)
-
 with st.form("passenger_form"):
     st.text_input("Name", placeholder="e.g. Benjamin Ogbonna", key="name")
     st.radio(
@@ -98,7 +87,7 @@ with st.form("passenger_form"):
 
 if submitted:
     s = st.session_state
-    prediction, result, probs = predict_survival(
+    prediction, result, probabilities = predict_survival(
         s.name, s.pclass, s.sex, s.age, s.sibsp, s.pach, s.fare
     )
 
@@ -109,6 +98,8 @@ if submitted:
         st.success(result)
 
     st.subheader("Probability")
-    for label, p in probs.items():
-        st.write(f"**{label}**: {p:.1%}")
-        st.progress(p)
+    if prediction == 0:
+        st.write(f"{probabilities[0]:.1%}")
+    else:
+        st.write(f"{probabilities[1]:.1%}")
+  
