@@ -68,7 +68,7 @@ def load_example(example):
 
 
 # THE UI
-st.title("🚢 Titanic Survival Predictor")
+st.title("Titanic Survival Predictor")
 st.write("Enter a passenger's details and see if our random forest thinks they'd survive.")
 
 st.caption("Try an example:")
